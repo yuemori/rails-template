@@ -1,3 +1,5 @@
+DATABASE_PORT = (32768..61000).to_a.sample
+
 # .gitignore
 run 'gibo Linux macOS Ruby Rails Vim > .gitignore' rescue nil
 gsub_file '.gitignore', /^config\/secrets.yml\n/, ''
@@ -240,7 +242,7 @@ EXPOSE 3000
 
 ENTRYPOINT [ \\
   "prehook", "bundle install -j4 --quiet", "--", \\
-  "prehook", "dockerize -timeout 60s -wait tcp://database:3306", "--" \\
+  "prehook", "dockerize -timeout 60s -wait tcp://database:#{DATABASE_PORT}", "--" \\
 ]
 DOCKERFILE
 
@@ -255,7 +257,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - RAILS_ENV=development
-      - DATABASE_URL=mysql2://root@database:3306
+      - DATABASE_URL=mysql2://root@database:#{DATABASE_PORT}
     ports:
       - '3000:3000'
     networks:
@@ -274,7 +276,7 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     ports:
-      - '3306:3306'
+      - '#{DATABASE_PORT}:3306'
     networks:
       - default
 
@@ -415,7 +417,7 @@ README
 create_file filename, <<EOF, force: true
 PATH_add vendor/bundle/bin
 
-export DATABASE_URL="mysql2://root@127.0.0.1:3306"
+export DATABASE_URL="mysql2://root@127.0.0.1:#{DATABASE_PORT}"
 EOF
 end
 run 'direnv allow'

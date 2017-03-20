@@ -430,5 +430,3 @@ run 'direnv allow'
 git :init
 git add: '.'
 git commit: '-m "Initial commit"'
-
-run 'echo "Run \`bundle install\`"'

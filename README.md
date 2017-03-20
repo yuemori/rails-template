@@ -13,4 +13,5 @@
 
 ```bash
 curl https://raw.githubusercontent.com/yuemori/rails-template/master/setup.sh | bash -x
+bundle install
 ```

@@ -393,8 +393,9 @@ create_file 'README.md', <<README
 docker-compose build
 docker-compose run --rm web bundle exec rails db:setup
 docker-compose run --rm -e RAILS_ENV=test web bundle exec rails db:setup
+cp .envrc.sample .envrc
 
-bundle install
+bundle install --path vendor/bundle --binstubs vendor/bundle/bin -j4
 ```
 README
 

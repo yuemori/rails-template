@@ -417,7 +417,7 @@ bundle install
 README
 
 # direnv
-%w(envrc envrc.sample).each do |filename|
+%w(.envrc .envrc.sample).each do |filename|
 create_file filename, <<EOF, force: true
 PATH_add vendor/bundle/bin
 
@@ -430,3 +430,5 @@ run 'direnv allow'
 git :init
 git add: '.'
 git commit: '-m "Initial commit"'
+
+run 'echo "Run `bundle install"`'

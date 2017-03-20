@@ -218,24 +218,6 @@ create_file 'Dockerfile', <<DOCKERFILE, force: true
 FROM ruby:2.4.0
 
 ENV APP_ROOT /usr/src/app
-
-WORKDIR $APP_ROOT
-COPY Gemfile Gemfile
-COPY Gemfile.lock Gemfile.lock
-
-RUN bundle install -j4
-
-COPY . $APP_ROOT
-EXPOSE 3000
-
-ENTRYPOINT ["bundle", "exec"]
-CMD ["rails", "server", "-p", "3000", "-b", "0.0.0.0", "--pid", "/tmp/server.pid"]
-DOCKERFILE
-
-create_file 'Dockerfile.development', <<DOCKERFILE_DEV, force: true
-FROM ruby:2.4.0
-
-ENV APP_ROOT /usr/src/app
 ENV DOCKERIZE_VERSION v0.3.0
 ENV ENTRYKIT_VERSION 0.4.0
 
@@ -260,7 +242,7 @@ ENTRYPOINT [ \\
   "prehook", "bundle install -j4 --quiet", "--", \\
   "prehook", "dockerize -timeout 60s -wait tcp://database:3306", "--" \\
 ]
-DOCKERFILE_DEV
+DOCKERFILE
 
 create_file 'docker-compose.yml', <<DOCKER_COMPOSE, force: true
 version: '2'
@@ -270,7 +252,7 @@ services:
     container_name: #{app_name}-web
     build:
       context: .
-      dockerfile: Dockerfile.development
+      dockerfile: Dockerfile
     environment:
       - RAILS_ENV=development
       - DATABASE_URL=mysql2://root@database:3306

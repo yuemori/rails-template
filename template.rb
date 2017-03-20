@@ -242,7 +242,7 @@ EXPOSE 3000
 
 ENTRYPOINT [ \\
   "prehook", "bundle install -j4 --quiet", "--", \\
-  "prehook", "dockerize -timeout 60s -wait tcp://database:#{DATABASE_PORT}", "--" \\
+  "prehook", "dockerize -timeout 60s -wait tcp://database:3306", "--" \\
 ]
 DOCKERFILE
 
@@ -257,7 +257,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - RAILS_ENV=development
-      - DATABASE_URL=mysql2://root@database:#{DATABASE_PORT}
+      - DATABASE_URL=mysql2://root@database:3306
     ports:
       - '3000:3000'
     networks:

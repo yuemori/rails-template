@@ -263,7 +263,7 @@ ENTRYPOINT [ \\
 DOCKERFILE_DEV
 
 create_file 'docker-compose.yml', <<DOCKER_COMPOSE, force: true
-version: '3'
+version: '2'
 services:
   web:
     image: #{app_name}:latest
@@ -273,7 +273,7 @@ services:
       dockerfile: Dockerfile.development
     environment:
       - RAILS_ENV=development
-      - DATABASE_URL=${DATABASE_URL:-mysql2://root@database:3306}
+      - DATABASE_URL=mysql2://root@database:3306
     ports:
       - '3000:3000'
     networks:

@@ -2,7 +2,7 @@
 
 ## requirements
 
-- docker (v1.13.0+)
+- docker (v1.10.0+)
 - docker-compose
 - direnv
 - gibo

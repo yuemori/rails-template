@@ -417,9 +417,16 @@ bundle install
 README
 
 # direnv
-create_file '.envrc', <<EOF, force: true
+%w(envrc envrc.sample).each do |filename|
+create_file filename, <<EOF, force: true
 PATH_add vendor/bundle/bin
 
 export DATABASE_URL="mysql2://root@127.0.0.1:3306"
 EOF
+end
 run 'direnv allow'
+
+# git
+git :init
+git add: '.'
+git commit: '-m "Initial commit"'

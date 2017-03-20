@@ -1,0 +1,38 @@
+version: '2'
+services:
+  web:
+    image: example_project:latest
+    container_name: example_project-web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_URL=mysql2://root@database:3306
+    ports:
+      - '3000:3000'
+    networks:
+      - default
+    volumes:
+      - example_project_volume:/usr/local/bundle
+      - .:/usr/src/app
+    depends_on:
+      - database
+    tty: true
+    stdin_open: true
+
+  database:
+    image: mysql:5.7
+    container_name: example_project-db
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - '3306:3306'
+    networks:
+      - default
+
+volumes:
+  example_project_volume:
+
+networks:
+  default:

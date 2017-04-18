@@ -84,6 +84,7 @@ group :test do
   gem 'database_rewinder'
   gem 'simplecov'
   gem 'launchy'
+  gem 'turnip'
 end
 GEMFILE
 
@@ -165,6 +166,32 @@ Metrics/BlockLength:
     - 'spec/**/*.rb'
 YAML
 
+# set up turnip_helper
+create_file 'spec/turnip_helper.rb', %q{
+require 'capybara/dsl'
+require 'capybara/rspec'
+require 'capybara/poltergeist'
+require 'turnip'
+require 'turnip/capybara'
+
+Capybara.javascript_driver = :poltergeist
+Capybara.ignore_hidden_elements = true
+Capybara.run_server = false
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app, js_errors: true, inspector: true, timout: 90)
+end
+
+Capybara.configure do |config|
+  config.run_server = true
+  config.always_include_port = true
+  config.default_driver = :rack_test
+  config.javascript_driver = :poltergeist
+  config.ignore_hidden_elements = false
+end
+
+Dir.glob('spec/acceptance/steps/**/*_steps.rb') { |f| load f, true }
+}
+
 # set up Guard
 create_file 'Guardfile', %q{
 guard :rspec, cmd: 'bin/rspec' do
@@ -198,6 +225,12 @@ guard :rspec, cmd: 'bin/rspec' do
 
   # Rails config changes
   watch(rails.app_controller)  { "#{rspec.spec_dir}/controllers" }
+
+  # Turnip features and steps
+  watch(%r{^spec/acceptance/(.+)\.feature$})
+  watch(%r{^spec/acceptance/steps/(.+)_steps\.rb$}) do |m|
+    Dir[File.join("**/#{m[1]}.feature")][0] || "spec/acceptance"
+  end
 end
 
 guard :rubocop, all_on_start: false, cmd: 'bin/rubocop' do
@@ -332,6 +365,7 @@ ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../../config/environment", __FILE__)
 require "spec_helper"
 require "rspec/rails"
+require "turnip_helper"
 
 Dir[Rails.root.join("spec", "support", "**", "*.rb")].each { |f| require f }
 

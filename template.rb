@@ -12,7 +12,7 @@ default: &default
   encoding: utf8mb4
   collation: utf8mb4_bin
   url: <%= ENV['DATABASE_URL'] %>
-  database: #{app_name}_<%= ENV['RAILS_ENV'] %>
+  database: #{app_name}_<%= ENV['RAILS_ENV'] || 'development' %>
 
 development:
   <<: *default

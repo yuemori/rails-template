@@ -144,8 +144,8 @@ AllCops:
     - 'db/**/*'
     - 'tmp/**/*'
     - 'log/**/*'
-  RunRailsCops: true
   DisplayCopNames: true
+
 Style/Documentation:
   Enabled: false
 

@@ -2,6 +2,7 @@ DATABASE_PORT = (32768..61000).to_a.sample
 
 # .gitignore
 run 'gibo Linux macOS Ruby Rails Vim > .gitignore' rescue nil
+run 'sed -i -e "s/\.rspec/#.rspec/" .gitignore'
 gsub_file '.gitignore', /^config\/secrets.yml\n/, ''
 run 'echo ".envrc" >> .gitignore'
 
@@ -337,6 +338,11 @@ create_file '.rspec', <<EOF, force: true
 --format documentation
 EOF
 
+create_file '.rspec', <<RUBY, force: true
+--color
+--format documentation
+-r turnip/rspec
+RUBY
 
 create_file 'spec/spec_helper.rb', <<RUBY, force: true
 RSpec.configure do |config|

@@ -56,4 +56,6 @@ group :test do
   gem 'database_rewinder'
   gem 'simplecov'
   gem 'launchy'
+  gem 'turnip'
+  gem 'shoulda-matchers'
 end

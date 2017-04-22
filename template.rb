@@ -1,4 +1,6 @@
-DATABASE_PORT = (32768..61000).to_a.sample
+DATABASE_PORT = ENV['DATABASE_PORT'] || (32768..61000).to_a.sample
+RAILS_VERSION = ENV['RAILS_VERSION'] || '~> 5.0.2'
+RUBY_VERSION = ENV['RUBY_VERSION'] || '2.4.1'
 
 # .gitignore
 run 'gibo Linux macOS Ruby Rails Vim > .gitignore' rescue nil
@@ -13,7 +15,7 @@ default: &default
   encoding: utf8mb4
   collation: utf8mb4_bin
   url: <%= ENV['DATABASE_URL'] %>
-  database: #{app_name}_<%= ENV['RAILS_ENV'] || 'development' %>
+  database: #{app_name}-<%= ENV['RAILS_ENV'] || 'development' %>
 
 development:
   <<: *default
@@ -35,7 +37,7 @@ git_source(:github) do |repo_name|
 end
 
 group :default do
-  gem 'rails', '~> 5.0.2'
+  gem 'rails', '#{RAILS_VERSION}'
   gem 'slim-rails'
   gem 'puma', '~> 3.0'
   gem 'sass-rails', '~> 5.0'
@@ -252,7 +254,7 @@ coverage
 DOCKERIGNORE
 
 create_file 'Dockerfile', <<DOCKERFILE, force: true
-FROM ruby:2.4.0
+FROM ruby:#{RUBY_VERSION}
 
 ENV APP_ROOT /usr/src/app
 ENV DOCKERIZE_VERSION v0.3.0
